@@ -104,7 +104,6 @@ Before diving in, make sure you’ve got these installed:
    *(Compare this to your system pip to make sure you’re isolated.)*
 4. **Install dependencies**  
    ```bash
-   pip install --upgrade pip setuptools
    pip install -r requirements.txt
    ```
    *(Grab a coffee—this can take a moment.)*
