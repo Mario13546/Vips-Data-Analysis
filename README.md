@@ -83,7 +83,7 @@ Before diving in, make sure you’ve got these installed:
 1. **Create a virtual environment**  
    ```bash
    # macOS/Linux
-   python3.11 -m venv venv
+   python3 -m venv venv
 
    # Windows PowerShell
    python -m venv venv
@@ -115,7 +115,7 @@ Before diving in, make sure you’ve got these installed:
 ```text
 vips_data_analysis/
 ├── data/
-│   └── M-DD-YYYY/
+│   └── MM-DD-YYYY/
 │       ├── chip_a/
 │       │   ├── spreadsheet1.csv
 │       │   └── spreadsheet2.csv
@@ -130,7 +130,7 @@ vips_data_analysis/
 └── README.md
 ```
 
-- **Date folders** must be named like `4-17-2025` (M-DD-YYYY).  
+- **Date folders** must be named like `04-17-2025` (MM-DD-YYYY).  
 - **Under each date**, have `chip_a/` and/or `chip_b/` with your raw `.csv` files.
 
 ---
@@ -139,7 +139,7 @@ vips_data_analysis/
 
 1. **Copy a template notebook**  
    ```bash
-   cp scripts/4-17-2025.ipynb scripts/5-01-2025.ipynb
+   cp scripts/04-17-2025.ipynb scripts/05-01-2025.ipynb
    ```
 2. **Open it in VS Code** (double‑click in the Explorer).  
 3. **Select your kernel**  
@@ -147,6 +147,6 @@ vips_data_analysis/
    - Choose `venv (Python 3.11.8)`  
 4. **Run everything**  
    - Hit the ▶️ “Run All” button at the top.  
-   - Sit back, watch the cells execute, and let the graphs magically appear under `graphs/M-DD-YYYY/...`.
+   - Sit back, watch the cells execute, and let the graphs magically appear under `graphs/MM-DD-YYYY/...`.
 
 > 💡 **Tip:** If your computer fan sounds like a jet engine, you’re doing it right.
