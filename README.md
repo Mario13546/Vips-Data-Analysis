@@ -5,15 +5,7 @@
 Before diving in, make sure you’ve got these installed:
 
 - **Git**  
-  - Windows: [Download installer](https://git-scm.com/downloads)  
-  - macOS/Linux:  
-    ```bash
-    # macOS (Homebrew)
-    brew install git
-
-    # Ubuntu/Debian
-    sudo apt update && sudo apt install git
-    ```
+  - [Download here](https://git-scm.com/downloads)
 - **Git LFS** (required for Mac only)  
   ```bash
   # macOS (Homebrew)
@@ -26,15 +18,7 @@ Before diving in, make sure you’ve got these installed:
   git lfs install
   ```
 - **Python 3.11.8**:  
-  - Windows: [Download installer](https://www.python.org/downloads/release/python-3118/)  
-  - macOS/Linux:  
-    ```bash
-    # macOS (Homebrew)
-    brew install python@3.11
-
-    # Ubuntu/Debian
-    sudo apt update && sudo apt install python3.11 python3.11-venv python3.11-distutils
-    ```
+  - [Download here](https://www.python.org/downloads/release/python-3118/)
 - **Visual Studio Code**  
   - [Download here](https://code.visualstudio.com/download)  
 
