@@ -115,7 +115,7 @@ vips_data_analysis/
 ```
 
 - **Date folders** must be named like `04-17-2025` (MM-DD-YYYY).  
-- **Under each date**, have `chip_a/` and/or `chip_b/` with your raw `.csv` files.
+- **Under each date**, have `chip_1/` and/or `chip_2/` with your raw `.csv` files.
 
 ---
 
