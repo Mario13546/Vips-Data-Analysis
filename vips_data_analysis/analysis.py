@@ -125,6 +125,126 @@ class Analysis:
             else:
                 f.write(f"Fail to reject the null hypothesis: No significant difference between group means.")
 
+    def estimate_burst_pressure(
+        self,
+        df: pd.DataFrame,
+        chip: str,
+        press_key: str = "PRESS",
+        time_key: str = "TIME",
+        window: int = 5,
+        drop_fraction: float = 0.1,
+        run_label: str | None = None,
+    ) -> float:
+        """
+        Estimate the burst pressure of a diode from a pressure-vs-time trace.
+
+        Heuristic:
+        - Smooth the pressure with a rolling median (window points).
+        - Compute the first large negative drop in the smoothed trace.
+        - Define burst pressure as the maximum pressure just before that drop.
+        - If no strong drop is found, fall back to the global max pressure.
+
+        Parameters
+        ----------
+        df : pd.DataFrame
+            DataFrame containing time and pressure columns (already cleaned).
+        chip : str
+            Chip identifier, used in the output filename.
+        press_key : str
+            Key in self.COL_NAMES for the pressure column (default "PRESS").
+        time_key : str
+            Key in self.COL_NAMES for the time column (default "TIME").
+        window : int
+            Rolling median window size for smoothing (in points).
+        drop_fraction : float
+            Minimum drop magnitude as a fraction of the total pressure range
+            required to treat a drop as a burst event. Default = 0.1 (10%).
+        run_label : str | None
+            Optional additional label (e.g., run index) for the output file.
+
+        Returns
+        -------
+        float
+            Estimated burst pressure (same units as the pressure column).
+            Returns np.nan if no data is available.
+        """
+        # Resolve actual column names from keys
+        p_col = self.COL_NAMES.get(press_key, press_key)
+        t_col = self.COL_NAMES.get(time_key, time_key)
+
+        # Extract and clean relevant columns
+        cols = [p_col]
+        if t_col in df.columns:
+            cols.append(t_col)
+
+        data = df[cols].copy()
+        data[p_col] = pd.to_numeric(data[p_col], errors="coerce")
+        data = data.dropna(subset=[p_col])
+
+        if data.empty:
+            burst_pressure = np.nan
+        else:
+            # Sort by time if available
+            if t_col in data.columns:
+                data = data.sort_values(by=t_col)
+
+            p = data[p_col].to_numpy(dtype=float)
+
+            if p.size < 3:
+                burst_pressure = float(np.nan)
+            else:
+                # Rolling-median smoothing
+                # (simple Python implementation to avoid extra dependencies)
+                from collections import deque
+                import statistics
+
+                smooth = []
+                dq = deque()
+                for val in p:
+                    dq.append(val)
+                    if len(dq) > window:
+                        dq.popleft()
+                    smooth.append(statistics.median(dq))
+                smooth = np.asarray(smooth, dtype=float)
+
+                # First differences of smoothed pressure
+                dp = np.diff(smooth)
+                min_dp_idx = int(np.argmin(dp))
+                min_dp = dp[min_dp_idx]          # most negative change
+                drop_mag = -min_dp               # positive magnitude of the drop
+                p_range = float(smooth.max() - smooth.min())
+
+                # Default: global max
+                burst_idx = int(np.argmax(smooth))
+                burst_pressure = float(smooth[burst_idx])
+
+                # Check if we have a "strong enough" drop to call it a burst
+                if p_range > 0 and drop_mag >= drop_fraction * p_range:
+                    # Look for the max pressure prior to the drop
+                    pre_drop_end = min(min_dp_idx + 1, smooth.size)
+                    if pre_drop_end > 0:
+                        burst_idx = int(np.argmax(smooth[:pre_drop_end]))
+                        burst_pressure = float(smooth[burst_idx])
+
+        # Write a small report file
+        suffix = f"_{run_label}" if run_label is not None else ""
+        out_path = os.path.join(self.analysis_str, f"{chip}_burst_pressure{suffix}.txt")
+
+        with open(out_path, "w") as f:
+            f.write("Burst Pressure Estimation\n")
+            f.write("-------------------------\n")
+            f.write(f"Chip: {chip}\n")
+            f.write(f"Pressure column: {p_col}\n")
+            f.write(f"Window (points): {window}\n")
+            f.write(f"Drop fraction threshold: {drop_fraction:.3f}\n\n")
+
+            if np.isnan(burst_pressure):
+                f.write("Result: No clear burst event detected (insufficient or invalid data).\n")
+            else:
+                f.write(f"Estimated burst pressure: {burst_pressure:.3f}\n")
+
+        return burst_pressure
+
     # GETTERS AND SETTER
     def get_i_range(self):
         return self.i_range
