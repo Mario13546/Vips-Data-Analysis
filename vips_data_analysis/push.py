@@ -198,12 +198,15 @@ class Push:
 
         return df_melt
 
-    def plot_all(self, x_label = "Pressure In (mb)", y_label = "Flow Rate Out (µL/min)", with_regression: bool = False) -> None:
+    def plot_all(self, with_regression: bool = False) -> None:
         """
         Plot all dataframes in self.filtered_dict(), preserving the original
         behavior (including chi-square per dataframe and a single ANOVA).
         """
         anova_data = []
+
+        X_LABEL = "Pressure In (mb)"
+        Y_LABEL = "Flow Rate Out (µL/min)"
 
         # Graph all the data
         for key, chip_list in self.filtered_dict.items():
@@ -211,12 +214,12 @@ class Push:
                 if with_regression:
                     # Plot with regression fits
                     data_list, chi_df = self._plot_single_df_with_regression(
-                        df, key, i, x_label, y_label
+                        df, key, i, X_LABEL, Y_LABEL
                     )
                 else:
                     # Plot plain scatter
                     data_list = self._plot_single_df(
-                        df, key, i, x_label, y_label
+                        df, key, i, X_LABEL, Y_LABEL
                     )
                     chi_df = df
 

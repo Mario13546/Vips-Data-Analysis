@@ -1,9 +1,6 @@
 # Import libraries
 from pathlib import Path
-
-# Import custom classes
 from vips_data_analysis import Push
-
 
 # Define the column names
 col_names = {
@@ -21,4 +18,4 @@ push.load_data()
 push.data_cleaning()
 
 # Plot the data
-push.plot_all(with_regression=False)
+push.plot_all()
