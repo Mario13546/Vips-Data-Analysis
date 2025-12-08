@@ -1,6 +1,8 @@
+# Import libraries
 from pathlib import Path
-from vips_data_analysis import Push_Pull  # assuming you export it
+from vips_data_analysis import Push_Pull
 
+# Define the column names
 col_names = {
     "TIME"   : "Time",
     "FLOW"   : "MFCS-EZ (884) #2",
@@ -8,7 +10,14 @@ col_names = {
     "PRESS2" : "MFCS-EZ (884) #3",
 }
 
+# Init the generic class
 push_pull = Push_Pull(Path.cwd().__str__(), "10-24-2025", col_names)
+
+# Load the data
 push_pull.load_data()
+
+# Clean the data
 push_pull.data_cleaning()
+
+# Plot the data
 push_pull.plot_all()
