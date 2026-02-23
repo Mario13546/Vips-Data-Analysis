@@ -91,23 +91,27 @@ class Analysis:
         """
         Perform one-way ANOVA test
         """
-        # Number of groups and total number of observations
-        k = len(y_vals)
-        n = 0
+        # Keep only groups with at least 2 valid numeric points.
+        groups = []
+        for group in y_vals:
+            arr = np.asarray(group, dtype=float)
+            arr = arr[~np.isnan(arr)]
+            if arr.size >= 2:
+                groups.append(arr)
 
-        # Return if there is only one value
-        if (k <= 1):
+        # Need at least 2 groups for one-way ANOVA.
+        k = len(groups)
+        if k <= 1:
             return
 
-        for group in y_vals:
-            n += len(group)
-
-        # Perform one-way ANOVA
-        f_statistic, p_value = stats.f_oneway(*y_vals)
-
-        # Degrees of freedom
+        n = sum(len(group) for group in groups)
         df_between = k - 1
         df_within = n - k
+        if df_within <= 0:
+            return
+
+        # Perform one-way ANOVA
+        f_statistic, p_value = stats.f_oneway(*groups)
 
         # Calculate critical F value
         f_critical = stats.f.ppf(1 - alpha, df_between, df_within)
