@@ -204,8 +204,8 @@ class Push_Pull:
         # ----------------------------
         # Draw bold zero lines on BOTH axes
         # ----------------------------
-        ax1.axhline(0, color="black", linewidth=1.0)
-        ax2.axhline(0, color="black", linewidth=1.0)
+        ax1.axhline(0, color="black", linewidth=1.0, linestyle="--")
+        ax2.axhline(0, color="black", linewidth=1.0, linestyle="--")
 
         # ----------------------------
         # Flow data (LINE instead of points)
@@ -213,8 +213,8 @@ class Push_Pull:
         flow_data_line = ax1.plot(
             t,
             flow,
-            linestyle="-",
-            linewidth=1.5,
+            linestyle="--",
+            linewidth=3.0,
             color="tab:blue",
             label="Flow Data",
         )[0]
