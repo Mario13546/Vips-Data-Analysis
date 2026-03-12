@@ -3,12 +3,12 @@ from pathlib import Path
 from vips_data_analysis import Push_Pull
 
 # Define the date
-date = "12-19-2025"
+date = "2025-11-11"
 
 # Define the column names
 col_names = {
     "TIME"   : "Time",
-    "FLOW"   : "Flow Unit #2 [Flowboard (340)]",
+    "FLOW"   : "Flow Unit #8 [Flowboard (340)]",
     "PRESS1" : "MFCS-EZ (884) #2",
     "PRESS2" : "MFCS-EZ (884) #3",
 }

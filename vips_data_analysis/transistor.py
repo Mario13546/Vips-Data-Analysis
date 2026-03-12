@@ -10,7 +10,7 @@ class Transistor:
     """
     Transistor test workflow.
 
-    Defaults are set for your 2-22-2026 dataset:
+    Defaults are set for your 2026-02-22 dataset:
     - Input signal from column F (index 5)
     - Output signal from column J (index 9)
     """
@@ -18,7 +18,7 @@ class Transistor:
     def __init__(
         self,
         parent_directory: str,
-        date: str = "2-22-2026",
+        date: str = "2026-02-22",
         input_col_index: int = 5,
         output_col_index: int = 9,
         time_col_index: int = 0,

@@ -25,7 +25,7 @@ class Burst:
         parent_directory : str
             Root directory (expects data/graphs/analysis under this).
         date : str
-            Date string used to construct subdirectories (e.g., "11-20-2025").
+            Date string used to construct subdirectories (e.g., "2025-11-20").
         col_names : dict
             Mapping for time / flow / pressure columns, e.g.:
 
