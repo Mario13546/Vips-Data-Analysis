@@ -2,6 +2,9 @@
 from pathlib import Path
 from vips_data_analysis import Burst
 
+# Define the date
+date = "2025-11-20"
+
 # Define the column names
 col_names = {
     "TIME":  "Time",
@@ -10,7 +13,7 @@ col_names = {
 }
 
 # Init the generic class
-burst = Burst(Path.cwd().__str__(), "11-20-2025", col_names)
+burst = Burst(Path.cwd().__str__(), date, col_names)
 
 # Load the data
 burst.load_data()

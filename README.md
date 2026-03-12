@@ -6,19 +6,19 @@ Before diving in, make sure you’ve got these installed:
 
 - **Git**  
   - [Download here](https://git-scm.com/downloads)
-- **Git LFS** (required for Mac only)  
+- **Git LFS** (required for Linux and Mac only)  
   ```bash
-  # macOS (Homebrew)
-  brew install git-lfs
-
   # Ubuntu/Debian
   sudo apt install git-lfs
+
+  # macOS (Homebrew)
+  brew install git-lfs
 
   # Then enable for your user
   git lfs install
   ```
-- **Python 3.11.8**:  
-  - [Download here](https://www.python.org/downloads/release/python-3118/)
+- **Python 3**:  
+  - [Download here](https://www.python.org/downloads/)
 - **Visual Studio Code**  
   - [Download here](https://code.visualstudio.com/download)  
 
@@ -26,8 +26,8 @@ Before diving in, make sure you’ve got these installed:
 
 ## 🗂️ Folder Creation
 
-1. **Pick your folder.**  
-   Create a folder named vips_data_analysis wherever you like
+1. **Pick your folder.**
+   - Create a folder named vips_data_analysis wherever you like
 
 ---
 
@@ -39,7 +39,7 @@ Before diving in, make sure you’ve got these installed:
 2. **Open the integrated terminal**  
    - Windows/Linux: <kbd>Ctrl</kbd>+<kbd>`</kbd>  
    - macOS:      <kbd>⌘</kbd>+<kbd>`</kbd>  
-   - (If that fails, hit <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> or <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>, type “Toggle Terminal” → Enter.)
+> 💡 **Tip:** If that fails, hit <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> or <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>, then type “Toggle Terminal” → Enter.
 3. **Clone the repo.**
    ```bash
    git clone https://github.com/Mario13546/Vips-Data-Analysis .
@@ -54,8 +54,7 @@ Before diving in, make sure you’ve got these installed:
    - **Required**  
      - `Python` (Microsoft) → gives you Pylance & Debugger  
      - `isort`   (Microsoft)  
-     - `Jupyter` (Microsoft) → includes all Jupyter goodies  
-   - **Optional but awesome**  
+   - **Optional but helpful**  
      - `Rainbow CSV`    (mechatroner) — colorize your CSVs  
      - `Data Wrangler`  (Microsoft)   — visualize tables in a snap  
      - `Python Environments` (Microsoft, beta) — manage venvs  
@@ -98,39 +97,52 @@ Before diving in, make sure you’ve got these installed:
 
 ```text
 vips_data_analysis/
+├── .venv
+│   └── (all the files needed for the virtual environment)
+├── analysis/
+│   └── (auto‑populated by scripts)
 ├── data/
-│   └── MM-DD-YYYY/
-│       ├── chip_a/
-│       │   ├── spreadsheet1.csv
-│       │   └── spreadsheet2.csv
-│       └── chip_b/
-│           ├── spreadsheet1.csv
-│           └── spreadsheet2.csv
+│   └── YYYY-MM-DD/
+│       └── chip_#/
+│           ├── spreadsheet_1.csv
+│           └── spreadsheet_2.csv
 ├── graphs/
 │   └── (auto‑populated by scripts)
+├── script_templates
+│   └── (template files for the different types of chips and tests)
 ├── scripts/
-│   └── *.ipynb
+│   └── *.py
+├── vips_data_analysis/
+│   └── (package files contained here)
+├── .gitattributes
+├── .gitignore
+├── LICENSE
+├── README.md
 ├── requirements.txt
-└── README.md
+└── setup.py
 ```
 
-- **Date folders** must be named like `04-17-2025` (MM-DD-YYYY).  
+- **Date folders** must be named like `2025-04-17` (YYYY-MM-DD).  
 - **Under each date**, have `chip_1/` and/or `chip_2/` with your raw `.csv` files.
 
 ---
 
 ## ▶️ Running the Analysis
 
-1. **Copy a template notebook**  
+1. **Install the VIPS Package**
    ```bash
-   cp scripts/04-17-2025.ipynb scripts/05-01-2025.ipynb
+   pip install -e .
    ```
-2. **Open it in VS Code** (double‑click in the Explorer).  
-3. **Select your kernel**  
-   - Click “Select Kernel” (top right of the notebook editor)  
-   - Choose `venv (Python 3.11.8)`  
-4. **Run everything**  
-   - Hit the ▶️ “Run All” button at the top.  
-   - Sit back, watch the cells execute, and let the graphs magically appear under `graphs/MM-DD-YYYY/...`.
+2. **Copy a template notebook**  
+   ```bash
+   cp script_templates/single_diode_push_pull scripts/YYYY-MM-DD.ipynb
+   ```
+3. **Open it in VS Code** (double‑click in the Explorer).
+4. **Change the Date**  
+   - Change the date variable to the current date (make sure to match the convention).
+> ❗ **IMPORTANT:** Ensure the date is changed for relevant analysis!
+5. **Run everything**  
+   - Hit the ▶️ “Run Python File” button in the top right.  
+   - Sit back, watch the program execute, and let the graphs magically appear under `graphs/YYYY-MM-DD/...`.
 
 > 💡 **Tip:** If your computer fan sounds like a jet engine, you’re doing it right.
