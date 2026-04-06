@@ -67,7 +67,7 @@ class Transistor:
             self.data_dict["chip_1"] = []
             for fname in flat_csvs:
                 path = self.directory_str + fname
-                self.data_dict["chip_1"].append(pd.read_csv(path))
+                self.data_dict["chip_1"].append(pd.read_csv(path, delimiter=";"))
 
         # Optional chip-subfolder layout
         for chip in os.listdir(self.directory_str):
@@ -80,7 +80,7 @@ class Transistor:
                 if not fname.lower().endswith(".csv"):
                     continue
                 path = chip_dir + fname
-                self.data_dict[chip].append(pd.read_csv(path))
+                self.data_dict[chip].append(pd.read_csv(path, delimiter=";"))
 
     @staticmethod
     def _parse_time_to_seconds(series: pd.Series) -> pd.Series:
@@ -152,7 +152,7 @@ class Transistor:
 
                 self.filtered_dict[chip].append(clean_df)
 
-    def _build_plot(self, df: pd.DataFrame, chip: str, index: int) -> None:
+    def _build_plot(self, df: pd.DataFrame, chip: str, index: int, x_label: str, y_label: str) -> None:
         """
         Plot output vs input for one run.
         """
@@ -161,8 +161,8 @@ class Transistor:
 
         fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
         ax.plot(df[x_col].values, df[y_col].values, ".", markersize=2, color="tab:blue")
-        ax.set_xlabel("Input (column F)")
-        ax.set_ylabel("Output (column J)")
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
         ax.set_title("Transistor Transfer: Output vs Input")
         ax.grid(True, alpha=0.3)
 
@@ -175,15 +175,25 @@ class Transistor:
         fig.savefig(out_path)
         plt.close(fig)
 
-    def plot_all(self, run_anova: bool = True) -> None:
+    def plot_all(
+        self,
+        properties: dict = {
+            "x_label": "Gate Pressure (mbar)",
+            "y_label": "Flow Rate (µL/min)"
+        },
+        run_anova: bool = True
+    ) -> None:
         """
         Plot all cleaned runs and optionally run one-way ANOVA on output.
         """
+        x_label = properties["x_label"]
+        y_label = properties["y_label"]
+
         anova_groups = []
 
         for chip, df_list in self.filtered_dict.items():
             for i, df in enumerate(df_list, start=1):
-                self._build_plot(df, chip, i)
+                self._build_plot(df, chip, i, x_label, y_label)
                 anova_groups.append(df[self.COL_NAMES["OUTPUT"]].values)
 
         if run_anova and anova_groups:
@@ -194,12 +204,19 @@ class Transistor:
         df: pd.DataFrame,
         chip: str = "single",
         index: int = 1,
+        properties: dict = {
+            "x_label": "Gate Pressure (mbar)",
+            "y_label": "Flow Rate (µL/min)"
+        },
         run_stats: bool = False,
     ) -> None:
         """
         Plot a single cleaned dataframe.
         """
-        self._build_plot(df, chip, index)
+        x_label = properties["x_label"]
+        y_label = properties["y_label"]
+
+        self._build_plot(df, chip, index, x_label, y_label)
 
         if run_stats:
             self.analysis.anova_test([df[self.COL_NAMES["OUTPUT"]].values])
