@@ -1,9 +1,9 @@
 # Import libraries
 from pathlib import Path
-
-# Import custom classes
 from vips_data_analysis import Push
 
+# Define the date
+date = "2025-08-27"
 
 # Define the column names
 col_names = {
@@ -12,7 +12,7 @@ col_names = {
 }
 
 # Init the generic class
-push = Push(Path.cwd().__str__(), "08-27-2025", col_names)
+push = Push(Path.cwd().__str__(), date, col_names)
 
 # Load the data
 push.load_data()
