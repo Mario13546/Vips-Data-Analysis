@@ -12,6 +12,8 @@ import numpy as np
 WINDOW_NAME = "Actuator Bend Setup"
 TRACK_WINDOW_NAME = "Actuator Bend Tracking"
 POINT_COUNT = 3
+TEXT_COLOR = (40, 255, 255)
+TEXT_OUTLINE_COLOR = (0, 0, 0)
 
 
 @dataclass
@@ -128,6 +130,36 @@ def draw_points(frame: np.ndarray, points: np.ndarray) -> None:
         )
 
 
+def draw_readable_text(
+    frame: np.ndarray,
+    text: str,
+    origin: tuple[int, int],
+    font_scale: float,
+    color: tuple[int, int, int] = TEXT_COLOR,
+    thickness: int = 2,
+) -> None:
+    cv2.putText(
+        frame,
+        text,
+        origin,
+        cv2.FONT_HERSHEY_SIMPLEX,
+        font_scale,
+        TEXT_OUTLINE_COLOR,
+        thickness + 3,
+        cv2.LINE_AA,
+    )
+    cv2.putText(
+        frame,
+        text,
+        origin,
+        cv2.FONT_HERSHEY_SIMPLEX,
+        font_scale,
+        color,
+        thickness,
+        cv2.LINE_AA,
+    )
+
+
 def annotate_frame(
     frame: np.ndarray,
     points: np.ndarray,
@@ -138,45 +170,29 @@ def annotate_frame(
     annotated = frame.copy()
     draw_points(annotated, points)
 
-    cv2.putText(
+    draw_readable_text(
         annotated,
         f"Frame: {frame_index}",
         (20, 35),
-        cv2.FONT_HERSHEY_SIMPLEX,
         0.8,
-        (255, 255, 255),
-        2,
-        cv2.LINE_AA,
     )
-    cv2.putText(
+    draw_readable_text(
         annotated,
         f"Joint angle: {angle_degrees:6.2f} deg",
         (20, 70),
-        cv2.FONT_HERSHEY_SIMPLEX,
         0.8,
-        (255, 255, 255),
-        2,
-        cv2.LINE_AA,
     )
-    cv2.putText(
+    draw_readable_text(
         annotated,
         f"Bending: {flexion_degrees:6.2f} deg",
         (20, 105),
-        cv2.FONT_HERSHEY_SIMPLEX,
         0.8,
-        (255, 255, 255),
-        2,
-        cv2.LINE_AA,
     )
-    cv2.putText(
+    draw_readable_text(
         annotated,
         "Straight actuator is close to 0 deg bend.",
         (20, 140),
-        cv2.FONT_HERSHEY_SIMPLEX,
         0.6,
-        (255, 255, 255),
-        2,
-        cv2.LINE_AA,
     )
     return annotated
 
@@ -196,15 +212,11 @@ def select_initial_points(frame: np.ndarray) -> np.ndarray:
             "Press R to reset, ENTER or SPACE to confirm.",
         ]
         for index, line in enumerate(instructions):
-            cv2.putText(
+            draw_readable_text(
                 display_frame,
                 line,
                 (20, 35 + 28 * index),
-                cv2.FONT_HERSHEY_SIMPLEX,
                 0.7,
-                (255, 255, 255),
-                2,
-                cv2.LINE_AA,
             )
 
         if selected_points:
